@@ -11,12 +11,14 @@ final class ImagesListCell: UITableViewCell {
     
     // MARK: - Outlets
     
-    @IBOutlet var CellDateLabel: UILabel!
-    @IBOutlet var CellImage: UIImageView!
-    @IBOutlet var CellLikeButton: UIButton!
+    @IBOutlet var сellDateLabel: UILabel!
+    @IBOutlet var сellImage: UIImageView!
+    @IBOutlet var сellLikeButton: UIButton!
     
     // MARK: - Properties (var & let)
     static let reuseIdentifier = "ImagesListCell"
+    
+    var gradient = CAGradientLayer()
     
     
     // MARK: - Actions (IBActions)
@@ -24,20 +26,39 @@ final class ImagesListCell: UITableViewCell {
     
     
     // MARK: - Functions
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        addGradient()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let height: CGFloat = 30
+        gradient.frame = CGRect(x: 0, y: frame.height - height - 4, width: frame.width , height: height)
+    }
 
-//    func addGradient () {
-//        let height: CGFloat = 30
-//        let gradient = CAGradientLayer()
-//
-//        gradient.frame = CGRect(x: 0, y: CellImage.bounds.height - height, width: CellImage.bounds.width , height: height)
-//
-//        let topColor = UIColor.init(white: 0, alpha: 0)
-//        let botomColor = UIColor.init(white: 0, alpha: 1)
-//        gradient.colors = [topColor.cgColor, botomColor.cgColor]
-//
-//        gradient.locations = [0, 1]
-//
-//        CellImage.layer.addSublayer(gradient)
-//    }
+    func addGradient () {
+        
+        let gradient = CAGradientLayer()
+        let topColor = UIColor.init(white: 0, alpha: 0)
+        let botomColor = UIColor.init(white: 0, alpha: 1)
+    
+        gradient.colors = [topColor.cgColor, botomColor.cgColor]
+        gradient.locations = [0, 1]
+        
+        self.gradient = gradient
+
+        сellImage.layer.addSublayer(gradient)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        сellImage.image = nil
+        сellDateLabel.text = nil
+        сellLikeButton.setImage(UIImage(named: "LikeNoActive"), for: .normal)
+        
+    }
 
 }

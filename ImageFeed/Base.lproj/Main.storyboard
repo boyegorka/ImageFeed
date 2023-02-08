@@ -67,9 +67,9 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" name="ypBlack"/>
                                         <connections>
-                                            <outlet property="CellDateLabel" destination="VPR-Lm-3r4" id="HyF-v8-OcD"/>
-                                            <outlet property="CellImage" destination="QNm-lA-9XR" id="MOO-bx-3Ay"/>
-                                            <outlet property="CellLikeButton" destination="QCW-u3-Jjr" id="Kee-1R-rf8"/>
+                                            <outlet property="сellDateLabel" destination="VPR-Lm-3r4" id="HyF-v8-OcD"/>
+                                            <outlet property="сellImage" destination="QNm-lA-9XR" id="MOO-bx-3Ay"/>
+                                            <outlet property="сellLikeButton" destination="QCW-u3-Jjr" id="Kee-1R-rf8"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
