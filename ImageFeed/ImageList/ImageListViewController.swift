@@ -15,7 +15,7 @@ class ImageListViewController: UIViewController {
 
     // MARK: - Properties (var & let)
     private let photosName: [String] = Array(0...20).map{ "\($0)" }
-    
+    private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateStyle = .long
@@ -38,6 +38,16 @@ class ImageListViewController: UIViewController {
     
     // MARK: - Functions
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == ShowSingleImageSegueIdentifier {
+            let viewController = segue.destination as! SingleImageViewController
+            let indexPath = sender as! IndexPath
+            let image = UIImage(named: photosName[indexPath.row])
+            viewController.image = image
+        } else {
+            super.prepare(for: segue, sender: sender)
+        }
+    }
     
 }
 
@@ -66,6 +76,7 @@ extension ImageListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -95,7 +106,5 @@ extension ImageListViewController {
         if indexPath.row % 2 == 0 {
             cell.сellLikeButton.setImage(UIImage(named: "LikeActive"), for: .normal)
         }
-        
     }
-    
 }
