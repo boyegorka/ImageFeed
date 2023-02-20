@@ -14,7 +14,7 @@ class ImageListViewController: UIViewController {
     @IBOutlet private var tableView: UITableView!
 
     // MARK: - Properties (var & let)
-    private let photosName: [String] = Array(0...20).map{ "\($0)" }
+    private let photosName: [String] = Array(0...21).map{ "\($0)" }
     private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
     private lazy var dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -48,10 +48,10 @@ class ImageListViewController: UIViewController {
             super.prepare(for: segue, sender: sender)
         }
     }
-    
 }
 
     // MARK: - Extensions
+
 extension ImageListViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
