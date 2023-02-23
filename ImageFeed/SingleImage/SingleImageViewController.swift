@@ -8,7 +8,12 @@
 import UIKit
 
 final class SingleImageViewController: UIViewController {
+    
+    // MARK: - Outlets
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var scrollView: UIScrollView!
 
+    
     // MARK: - Properties (var & let)
 
     var image: UIImage! {
@@ -28,11 +33,6 @@ final class SingleImageViewController: UIViewController {
         imageView.image = image
         rescaleAndCenterImageInScrollView(image: image)
     }
-
-
-    // MARK: - Outlets
-    @IBOutlet var imageView: UIImageView!
-    @IBOutlet var scrollView: UIScrollView!
 
     // MARK: - Actions (IBActions)
 

@@ -22,37 +22,39 @@ final class ProfileViewController: UIViewController {
         createProfileName()
         createProfileNickname()
         createProfileStatus()
-        createProfileLogOutbutton()
+        createProfileLogOutButton()
     }
     
-    func createProfileImage() {
+    private func createProfileImage() {
         let profileImage = UIImageView(image: UIImage(named: "Photo"))
         view.addSubview(profileImage)
         profileImage.tintColor = .gray
         profileImage.translatesAutoresizingMaskIntoConstraints = false
-        profileImage.heightAnchor.constraint(equalToConstant: 70).isActive = true
-        profileImage.widthAnchor.constraint(equalToConstant: 70).isActive = true
-        profileImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20).isActive = true
-        profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        NSLayoutConstraint.activate([
+            profileImage.heightAnchor.constraint(equalToConstant: 70),
+            profileImage.widthAnchor.constraint(equalToConstant: 70),
+            profileImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
+        ])
         self.profileImage = profileImage
     }
     
-    func createProfileName() {
+    private func createProfileName() {
         let profileName = UILabel()
-        profileName.text = "Екатерина Новикова"
         view.addSubview(profileName)
+        profileName.text = "Екатерина Новикова"
         profileName.textColor = UIColor(named: "ypWhite")
-        profileName.translatesAutoresizingMaskIntoConstraints = false
         profileName.font = UIFont.systemFont(ofSize: 23, weight: .bold)
+        profileName.translatesAutoresizingMaskIntoConstraints = false
         profileName.topAnchor.constraint(equalTo: profileImage?.bottomAnchor ?? view.topAnchor, constant: 8).isActive = true
         profileName.leadingAnchor.constraint(equalTo: profileImage?.leadingAnchor ?? view.leadingAnchor).isActive = true
         self.profileName = profileName
     }
     
-    func createProfileNickname() {
+    private func createProfileNickname() {
         let profileNickname = UILabel()
-        profileNickname.text = "@ekaterina_nov"
         view.addSubview(profileNickname)
+        profileNickname.text = "@ekaterina_nov"
         profileNickname.textColor = UIColor(named: "ypGray")
         profileNickname.translatesAutoresizingMaskIntoConstraints = false
         profileNickname.topAnchor.constraint(equalTo: profileName?.bottomAnchor ?? view.topAnchor, constant: 8).isActive = true
@@ -60,10 +62,10 @@ final class ProfileViewController: UIViewController {
         self.profileNickname = profileNickname
     }
     
-    func createProfileStatus() {
+    private func createProfileStatus() {
         let profileStatus = UILabel()
-        profileStatus.text = "Hello, world!"
         view.addSubview(profileStatus)
+        profileStatus.text = "Hello, world!"
         profileStatus.textColor = UIColor(named: "ypWhite")
         profileStatus.translatesAutoresizingMaskIntoConstraints = false
         profileStatus.topAnchor.constraint(equalTo: profileNickname?.bottomAnchor ?? view.topAnchor, constant: 8).isActive = true
@@ -71,7 +73,7 @@ final class ProfileViewController: UIViewController {
         self.profileStatus = profileStatus
     }
     
-    func createProfileLogOutbutton() {
+    private func createProfileLogOutButton() {
         let profileLogOutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(Self.logOut))
         view.addSubview(profileLogOutButton)
         profileLogOutButton.tintColor = UIColor(named: "ypRed")

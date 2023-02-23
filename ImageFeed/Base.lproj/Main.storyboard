@@ -212,18 +212,15 @@
         <!--Navigation Controller-->
         <scene sceneID="Zfn-Ag-5D6">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="jHF-LH-nqK" sceneMemberID="viewController">
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="jHF-LH-nqK" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="" image="ImageStackActive" id="QHX-Fp-1ee"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="uZM-V3-O23">
-                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="ypBlack"/>
                         <color key="tintColor" name="ypWhite"/>
                         <color key="barTintColor" name="ypWhite"/>
-                        <navigationBarAppearance key="standardAppearance">
-                            <color key="backgroundColor" name="ypBlack"/>
-                        </navigationBarAppearance>
+                        <navigationBarAppearance key="standardAppearance"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
