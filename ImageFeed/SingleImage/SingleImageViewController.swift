@@ -12,7 +12,6 @@ final class SingleImageViewController: UIViewController {
     // MARK: - Outlets
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var scrollView: UIScrollView!
-
     
     // MARK: - Properties (var & let)
 
@@ -36,12 +35,12 @@ final class SingleImageViewController: UIViewController {
 
     // MARK: - Actions (IBActions)
 
-    @IBAction func didTappedBackButton(_ sender: Any) {
+    @IBAction func didTapBackButton(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
 
 
-    @IBAction func DidTapShareButton(_ sender: Any) {
+    @IBAction func didTapShareButton(_ sender: Any) {
         let share = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         present(share, animated: true, completion: nil)
     }
