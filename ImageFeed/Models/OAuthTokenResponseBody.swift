@@ -7,8 +7,6 @@
 
 import Foundation
 
-let decoder = JSONDecoder()
-
 struct OAuthTokenResponseBody: Decodable {
     let accessToken: String
     let tokenType: String

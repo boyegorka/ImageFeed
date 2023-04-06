@@ -6,20 +6,23 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
     // MARK: - Properties (var & let)
+    
+    private let service = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
 
     private lazy var profileImage: UIImageView = {
-        
         let profileImage = UIImageView()
         view.addSubview(profileImage)
         profileImage.tintColor = .gray
         profileImage.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            profileImage.heightAnchor.constraint(equalToConstant: 70),
-            profileImage.widthAnchor.constraint(equalToConstant: 70),
+            profileImage.heightAnchor.constraint(equalToConstant: 80),
+            profileImage.widthAnchor.constraint(equalToConstant: 80),
             profileImage.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
             profileImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20)
         ])
@@ -69,9 +72,18 @@ final class ProfileViewController: UIViewController {
     }()
     
     // MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = UIColor(named: "ypBlack")
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        
+        updateAvatar()
         setupData()
     }
     
@@ -79,19 +91,28 @@ final class ProfileViewController: UIViewController {
     
     @objc
     private func logOut() {
-        profileName.text = nil
-        profileNickname.text = nil
-        profileStatus.text = nil
-        profileImage.image = UIImage(systemName: "person.crop.circle.fill")
-        profileLogOutButton.isHidden = true
+        service.logOut()
     }
     
     
-    private func setupData() {
-        profileImage.image = UIImage(named: "Photo")
-        profileName.text = "Екатерина Новикова"
-        profileNickname.text = "@ekaterina_nov"
-        profileStatus.text = "Hello, world!"
+    func setupData() {
+        updateAvatar()
+        profileName.text = service.savedProfile?.name
+        profileNickname.text = service.savedProfile?.loginName
+        profileStatus.text = service.savedProfile?.bio
         profileLogOutButton.isHidden = false
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.profileImageURL,
+            let urlImage = URL(string: profileImageURL)
+        else { return }
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 60)
+        profileImage.kf.setImage(with: urlImage,
+                                 placeholder: UIImage(systemName: "person.crop.circle.fill"),
+                                 options: [.processor(processor),
+                                           .cacheSerializer(FormatIndicatedCacheSerializer.png)])
     }
 }
