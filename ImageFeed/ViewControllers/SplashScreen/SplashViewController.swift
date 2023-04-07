@@ -42,7 +42,7 @@ final class SplashViewController: UIViewController {
         setNeedsStatusBarAppearanceUpdate()
     }
     
-    func presentAuthViewController() {
+    private func presentAuthViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         guard let authViewController = storyboard.instantiateViewController(
             withIdentifier: "AuthViewController"
@@ -52,12 +52,12 @@ final class SplashViewController: UIViewController {
         self.present(authViewController, animated: true)
     }
     
-    func setupScreen() {
+    private func setupScreen() {
         splashScreenImage.image = UIImage(named: "Vector")
         view.backgroundColor = UIColor(named: "ypBlack")
     }
     
-    func checkFirstStart() {
+    private func checkFirstStart() {
         guard firstStart else { return }
         firstStart = false
         if storage.token != nil {
@@ -67,7 +67,7 @@ final class SplashViewController: UIViewController {
         }
     }
     
-    func switchToTabBarController() {
+    private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else { fatalError("Invalid configuration") }
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
@@ -101,7 +101,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 alert.addAction(action)
                 self.present(alert, animated: true, completion: nil)
                 
-                presentAuthViewController()
+                self.presentAuthViewController()
             }
         }
     }
@@ -112,7 +112,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             switch result {
             case .success(_):
                 self.switchToTabBarController()
-                let image = ProfileImageService.shared.fetchProfileImageURL(username: self.profileService.savedProfile!.username) { _ in }
+                ProfileImageService.shared.fetchProfileImageURL(username: self.profileService.savedProfile!.username) { _ in }
             case .failure(let error):
                 print(error)
                 self.presentAuthViewController()

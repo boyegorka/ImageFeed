@@ -49,8 +49,6 @@ extension URLSession {
                 if 200 ..< 300 ~= statusCode {
                     //Быть тут внимательнее, если будут проблемы с декодингом
                     fulfillCompletion(.success(data as! Data))
-                    print("data")
-                    print(data)
                 } else {
                     fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                 }

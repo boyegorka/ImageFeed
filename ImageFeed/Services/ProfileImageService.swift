@@ -43,17 +43,15 @@ final class ProfileImageService {
             switch result {
             case .success(let data):
                 self.profileImageURL = data.profileImage.large
-                print("profile image")
-                print(profileImageURL)
                 completion(.success(true))
+                NotificationCenter.default
+                    .post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL" : profileImageURL])
             case .failure(let error):
                 print("profile image error \(error)")
                 completion(.failure(error))
             }
         }
         task.resume()
-        NotificationCenter.default
-            .post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL" : profileImageURL])
     }
     
     private func object(for request: URLRequest, completion: @escaping (Result<UserResult, Error>) -> Void) -> URLSessionTask {

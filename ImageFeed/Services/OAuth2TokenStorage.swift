@@ -8,9 +8,9 @@
 import Foundation
 import SwiftKeychainWrapper
 
-class OAuth2TokenStorage {
+final class OAuth2TokenStorage {
     
-    let keyToken = "AuthToken"
+    private let keyToken = "AuthToken"
     
     var token: String? {
         get {
