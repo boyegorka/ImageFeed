@@ -13,10 +13,7 @@ final class SplashViewController: UIViewController {
     private let oauth2Service = OAuth2Service()
     private let storage = OAuth2TokenStorage()
     private var alertPresenter: AlertPresenter = AlertPresenter()
-    //private let profileService = ProfileService.shared
-    //private let profileController = ProfileViewController()
     private var firstStart = true
-    //private let authViewController = AuthViewController()
     
     private lazy var splashScreenImage: UIImageView = {
         let splashScreenImage = UIImageView()
@@ -101,7 +98,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                     guard let self = self else { return }
                     self.presentAuthViewController()
                 }
-                alertPresenter.show(result: viewModel)
+                self.alertPresenter.show(result: viewModel)
                 
             }
         }
