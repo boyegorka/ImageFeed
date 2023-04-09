@@ -31,9 +31,7 @@ extension URLRequest {
 // MARK: - Network Connection
 
 extension URLSession {
-    
-    //Добавил здесь дженерик 4.04.23, 11:52
-    func data <Data: Decodable>   (for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
+    func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
         
         let fulfillCompletion: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
@@ -47,8 +45,7 @@ extension URLSession {
                let statusCode = (response as? HTTPURLResponse)?.statusCode
             {
                 if 200 ..< 300 ~= statusCode {
-                    //Быть тут внимательнее, если будут проблемы с декодингом
-                    fulfillCompletion(.success(data as! Data))
+                    fulfillCompletion(.success(data))
                 } else {
                     fulfillCompletion(.failure(NetworkError.httpStatusCode(statusCode)))
                 }

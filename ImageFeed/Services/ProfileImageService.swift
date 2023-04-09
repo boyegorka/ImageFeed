@@ -45,13 +45,12 @@ final class ProfileImageService {
                 self.profileImageURL = data.profileImage.large
                 completion(.success(true))
                 NotificationCenter.default
-                    .post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL" : profileImageURL])
+                    .post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL" : self.profileImageURL])
             case .failure(let error):
                 print("profile image error \(error)")
                 completion(.failure(error))
             }
         }
-        task.resume()
     }
     
     private func object(for request: URLRequest, completion: @escaping (Result<UserResult, Error>) -> Void) -> URLSessionTask {
@@ -61,29 +60,6 @@ final class ProfileImageService {
                 Result { try decoder.decode(UserResult.self, from: data) }
             }
             completion(response)
-        }
-    }
-}
-
-extension ProfileImageService {
-    
-    struct UserResult: Decodable {
-        let profileImage: SizedImages
-        
-        enum CodingKeys: String, CodingKey {
-            case profileImage = "profile_image"
-        }
-    }
-    
-    struct SizedImages: Decodable {
-        let small: String
-        let medium: String
-        let large: String
-        
-        enum CodingKeys: String, CodingKey {
-            case small = "small"
-            case medium = "medium"
-            case large = "large"
         }
     }
 }

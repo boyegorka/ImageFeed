@@ -12,10 +12,11 @@ final class SplashViewController: UIViewController {
     
     private let oauth2Service = OAuth2Service()
     private let storage = OAuth2TokenStorage()
-    private let profileService = ProfileService.shared
-    private let profileController = ProfileViewController()
+    private var alertPresenter: AlertPresenter = AlertPresenter()
+    //private let profileService = ProfileService.shared
+    //private let profileController = ProfileViewController()
     private var firstStart = true
-    private let authViewController = AuthViewController()
+    //private let authViewController = AuthViewController()
     
     private lazy var splashScreenImage: UIImageView = {
         let splashScreenImage = UIImageView()
@@ -29,6 +30,7 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        alertPresenter.viewController = self
         setupScreen()
     }
     
@@ -95,27 +97,27 @@ extension SplashViewController: AuthViewControllerDelegate {
             case .success:
                 self.fetchProfile()
             case .failure:
-                //на будущее: засунуть алерт в отдельный файл
-                let alert = UIAlertController(title: "Что-то пошло не так", message: "Не удалось войти в систему", preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .default)
-                alert.addAction(action)
-                self.present(alert, animated: true, completion: nil)
+                let viewModel = AlertModel(title: "Что-то пошло не так", message: "Не удалось войти в систему", buttonText: "OK") { [weak self] in
+                    guard let self = self else { return }
+                    self.presentAuthViewController()
+                }
+                alertPresenter.show(result: viewModel)
                 
-                self.presentAuthViewController()
             }
         }
     }
     
     private func fetchProfile() {
-        profileService.fetchProfile(completion: { result in
+        let profileService = ProfileService.shared
+        profileService.fetchProfile(completion: { [weak self] result  in
             UIBlockingProgressHUD.dismiss()
             switch result {
             case .success(_):
-                self.switchToTabBarController()
-                ProfileImageService.shared.fetchProfileImageURL(username: self.profileService.savedProfile!.username) { _ in }
+                ProfileImageService.shared.fetchProfileImageURL(username: profileService.savedProfile?.username ?? "") { _ in }
+                self?.switchToTabBarController()
             case .failure(let error):
                 print(error)
-                self.presentAuthViewController()
+                self?.presentAuthViewController()
             }
         })
     }
