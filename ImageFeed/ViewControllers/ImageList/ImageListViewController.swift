@@ -69,12 +69,12 @@ extension ImageListViewController: UITableViewDataSource {
         
         return imageListCell
     }
+    
 }
 
 extension ImageListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
     }
     
