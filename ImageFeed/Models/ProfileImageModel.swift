@@ -8,14 +8,14 @@
 import Foundation
 
 struct UserResult: Decodable {
-    let profileImage: SizedImages
+    let profileImage: SizedProfileImages
     
     enum CodingKeys: String, CodingKey {
         case profileImage = "profile_image"
     }
 }
 
-struct SizedImages: Decodable {
+struct SizedProfileImages: Decodable {
     let small: String
     let medium: String
     let large: String

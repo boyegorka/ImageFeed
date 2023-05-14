@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WebKit
 
 final class ProfileService {
     
@@ -16,12 +17,18 @@ final class ProfileService {
     private (set) var savedProfile: Profile?
     
     func logOut() {
+        savedProfile = nil
         storage.token = nil
         UIApplication.shared.windows.filter({ $0.isKeyWindow }).first?.rootViewController = SplashViewController()
+        HTTPCookieStorage.shared.removeCookies(since: Date.distantPast)
+        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
+            records.forEach { record in
+                WKWebsiteDataStore.default().removeData(ofTypes: record.dataTypes, for: [record], completionHandler: {})
+            }
+        }
     }
     
     func fetchProfile(completion: @escaping (Result<Bool, Error>) -> Void) {
-        
         // Добавил устранение гонки, должно работать, если данные есть, то мы всё отменяем, если нет, то продолжаем запросы 4.04.23, 13:28
         assert(Thread.isMainThread)
         if task != nil {
@@ -30,10 +37,8 @@ final class ProfileService {
             } else {
                 return
             }
-        } else {
-            if savedProfile != nil {
-                return
-            }
+        } else if savedProfile != nil {
+            return
         }
         
         var request = URLRequest.makeHTTPRequest(path: "/me", httpMethod: "GET")
@@ -44,6 +49,7 @@ final class ProfileService {
         
         let task = object(for: request) { [weak self] result in
             guard let self = self else { return }
+            
             switch result {
             case .success(let body):
                 self.savedProfile = Profile.init(profileResult: body)
@@ -52,9 +58,8 @@ final class ProfileService {
                 completion(.failure(error))
             }
         }
+        self.task = task
     }
-    
-    
     
     private func object(for request: URLRequest, completion: @escaping (Result<ProfileResult, Error>) -> Void) -> URLSessionTask {
         let decoder = JSONDecoder()

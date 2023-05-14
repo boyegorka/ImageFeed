@@ -14,10 +14,9 @@ final class ProfileImageService {
     private let urlSession = URLSession.shared
     private let storage = OAuth2TokenStorage()
     private var task: URLSessionTask?
-    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    static let didChangeProfileImageNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
     
     func fetchProfileImageURL(username: String, completion: @escaping (Result<Bool, Error>) -> Void) {
-        
         // Добавил устранение гонки, должно работать, если данные есть, то мы всё отменяем, если нет, то продолжаем запросы 4.04.23, 13:30
         assert(Thread.isMainThread)
         if task != nil {
@@ -45,12 +44,13 @@ final class ProfileImageService {
                 self.profileImageURL = data.profileImage.large
                 completion(.success(true))
                 NotificationCenter.default
-                    .post(name: ProfileImageService.didChangeNotification, object: self, userInfo: ["URL" : self.profileImageURL])
+                    .post(name: ProfileImageService.didChangeProfileImageNotification, object: self)
             case .failure(let error):
                 print("profile image error \(error)")
                 completion(.failure(error))
             }
         }
+        self.task = task
     }
     
     private func object(for request: URLRequest, completion: @escaping (Result<UserResult, Error>) -> Void) -> URLSessionTask {

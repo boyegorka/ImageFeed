@@ -17,12 +17,11 @@ final class AlertPresenter {
     
     func show(result: AlertModel) {
         let alert = UIAlertController(title: result.title, message: result.message, preferredStyle: .alert)
-        let action = UIAlertAction(title: result.buttonText, style: .default) {_ in
-            result.completion()
+        
+        for action in result.actions {
+            alert.addAction(action)
         }
-        alert.view.accessibilityIdentifier = "Alert"
-        alert.addAction(action)
+        
         viewController?.present(alert, animated: true, completion: nil)
     }
-    
 }

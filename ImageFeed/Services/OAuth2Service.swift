@@ -17,8 +17,6 @@ final class OAuth2Service {
     private var lastCode: String?
     private var storage = OAuth2TokenStorage()
     
-    
-    
     private (set) var authToken: String? {
         get {
             return storage.token
@@ -87,5 +85,3 @@ extension OAuth2Service {
         )
     }
 }
-
-

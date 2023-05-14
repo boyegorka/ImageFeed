@@ -13,8 +13,7 @@ final class ProfileViewController: UIViewController {
     // MARK: - Properties (var & let)
     
     private let service = ProfileService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
-
+    
     private lazy var profileImage: UIImageView = {
         let profileImage = UIImageView()
         view.addSubview(profileImage)
@@ -32,7 +31,7 @@ final class ProfileViewController: UIViewController {
     private lazy var profileName: UILabel = {
         let profileName = UILabel()
         view.addSubview(profileName)
-        profileName.textColor = UIColor(named: "ypWhite")
+        profileName.textColor = .ypWhite
         profileName.font = UIFont.systemFont(ofSize: 23, weight: .bold)
         profileName.translatesAutoresizingMaskIntoConstraints = false
         profileName.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: 8).isActive = true
@@ -43,18 +42,17 @@ final class ProfileViewController: UIViewController {
     private lazy var profileNickname: UILabel = {
         let profileNickname = UILabel()
         view.addSubview(profileNickname)
-        profileNickname.textColor = UIColor(named: "ypGray")
+        profileNickname.textColor = .ypGray
         profileNickname.translatesAutoresizingMaskIntoConstraints = false
         profileNickname.topAnchor.constraint(equalTo: profileName.bottomAnchor, constant: 8).isActive = true
         profileNickname.leadingAnchor.constraint(equalTo: profileName.leadingAnchor).isActive = true
         return profileNickname
     }()
     
-    
     private lazy var profileStatus: UILabel = {
         let profileStatus = UILabel()
         view.addSubview(profileStatus)
-        profileStatus.textColor = UIColor(named: "ypWhite")
+        profileStatus.textColor = .ypWhite
         profileStatus.translatesAutoresizingMaskIntoConstraints = false
         profileStatus.topAnchor.constraint(equalTo: profileNickname.bottomAnchor , constant: 8).isActive = true
         profileStatus.leadingAnchor.constraint(equalTo: profileNickname.leadingAnchor ).isActive = true
@@ -64,7 +62,7 @@ final class ProfileViewController: UIViewController {
     private lazy var profileLogOutButton: UIButton = {
         let profileLogOutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(Self.logOut))
         view.addSubview(profileLogOutButton)
-        profileLogOutButton.tintColor = UIColor(named: "ypRed")
+        profileLogOutButton.tintColor = .ypRed
         profileLogOutButton.translatesAutoresizingMaskIntoConstraints = false
         profileLogOutButton.topAnchor.constraint(equalTo: profileImage.centerYAnchor ).isActive = true
         profileLogOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
@@ -75,16 +73,25 @@ final class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(named: "ypBlack")
+        view.backgroundColor = .ypBlack
         
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(forName: ProfileImageService.didChangeNotification, object: nil, queue: .main) { [weak self] _ in
+        NotificationCenter.default
+            .addObserver(forName: ProfileImageService.didChangeProfileImageNotification, object: nil, queue: .main) { [weak self] _ in
                 guard let self = self else { return }
+                stopAnimation()
                 self.updateAvatar()
             }
-        
-        updateAvatar()
-        setupData()
+        //setupData()
+        setDefaultData()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // В одном из спринтов мы вынесли загрузку профиля на Splash Screen, получается что профиль уже загружен, когда я перехожу на экран профиля, а код ниже для демонстрации работы анимации, в целом анимация тут лишняя. SetupData мы можем вызвать во ViewDidLoad
+        startAnimation()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
+            self.setupData()
+        })
     }
     
     // MARK: - Functions
@@ -94,8 +101,8 @@ final class ProfileViewController: UIViewController {
         service.logOut()
     }
     
-    
     func setupData() {
+        stopAnimation()
         updateAvatar()
         profileName.text = service.savedProfile?.name
         profileNickname.text = service.savedProfile?.loginName
@@ -114,5 +121,25 @@ final class ProfileViewController: UIViewController {
                                  placeholder: UIImage(systemName: "person.crop.circle.fill"),
                                  options: [.processor(processor),
                                            .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+    }
+    
+    func setDefaultData() {
+        profileName.text = "Фамилия Имя Отчество"
+        profileNickname.text = "Ваш nickname"
+        profileStatus.text = "Ваш статус"
+    }
+    
+    private func startAnimation() {
+        profileImage.addLayerLoading(radius: profileImage.frame.width/2)
+        profileName.addLayerLoading(radius: profileName.frame.height/2)
+        profileNickname.addLayerLoading(radius: profileNickname.frame.height/2)
+        profileStatus.addLayerLoading(radius: profileStatus.frame.height/2)
+    }
+    
+    private func stopAnimation() {
+        profileImage.removeLayerLoading()
+        profileName.removeLayerLoading()
+        profileNickname.removeLayerLoading()
+        profileStatus.removeLayerLoading()
     }
 }

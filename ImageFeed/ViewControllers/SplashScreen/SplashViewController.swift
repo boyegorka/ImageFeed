@@ -12,7 +12,6 @@ final class SplashViewController: UIViewController {
     
     private let oauth2Service = OAuth2Service()
     private let storage = OAuth2TokenStorage()
-    private var alertPresenter: AlertPresenter = AlertPresenter()
     private var firstStart = true
     
     private lazy var splashScreenImage: UIImageView = {
@@ -27,7 +26,6 @@ final class SplashViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        alertPresenter.viewController = self
         setupScreen()
     }
     
@@ -53,7 +51,7 @@ final class SplashViewController: UIViewController {
     
     private func setupScreen() {
         splashScreenImage.image = UIImage(named: "Vector")
-        view.backgroundColor = UIColor(named: "ypBlack")
+        view.backgroundColor = .ypBlack
     }
     
     private func checkFirstStart() {
@@ -72,34 +70,38 @@ final class SplashViewController: UIViewController {
             .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
     }
+    
+    private func showErrorAlert() {
+        let actionOK = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+            guard let self = self else { return }
+            self.presentAuthViewController()
+        }
+        
+        let viewModel = AlertModel(title: "Что-то пошло не так", message: "Не удалось войти в систему", actions: [actionOK])
+        let presenter = AlertPresenter(delegate: self)
+        presenter.show(result: viewModel)
+    }
 }
 
 extension SplashViewController: AuthViewControllerDelegate {
-
+    
     func authViewController(_ vc: AuthViewController, didAuthenticateWithCode code: String) {
         dismiss(animated: true) { [weak self] in
             guard let self = self else { return }
             self.fetchOAuthToken(code)
-            
         }
     }
     
     private func fetchOAuthToken(_ code: String) {
         UIBlockingProgressHUD.show()
         oauth2Service.fetchOAuthToken(code) { [weak self] result in
-            
             UIBlockingProgressHUD.dismiss()
             guard let self = self else { return }
             switch result {
             case .success:
                 self.fetchProfile()
             case .failure:
-                let viewModel = AlertModel(title: "Что-то пошло не так", message: "Не удалось войти в систему", buttonText: "OK") { [weak self] in
-                    guard let self = self else { return }
-                    self.presentAuthViewController()
-                }
-                self.alertPresenter.show(result: viewModel)
-                
+                showErrorAlert()
             }
         }
     }
