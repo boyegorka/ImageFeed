@@ -7,8 +7,6 @@
 
 import Foundation
 
-//let dateFormatting = ISO8601DateFormatter()
-
 struct PhotoResult: Decodable {
     let id: String
     let width: Int

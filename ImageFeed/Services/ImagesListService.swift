@@ -53,13 +53,7 @@ class ImagesListService {
     
     func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Bool, Error>) -> Void) {
         
-        var httpMethod: String = isLike ? "POST" : "DELETE"
-        
-//        if isLike {
-//            httpMethod = "POST"
-//        } else {
-//            httpMethod = "DELETE"
-//        }
+        let httpMethod: String = isLike ? "POST" : "DELETE"
         
         var request = URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like", httpMethod: httpMethod)
         
