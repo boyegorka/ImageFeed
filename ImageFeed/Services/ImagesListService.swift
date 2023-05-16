@@ -52,13 +52,14 @@ class ImagesListService {
     }
     
     func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Bool, Error>) -> Void) {
-        var httpMethod: String
         
-        if isLike {
-            httpMethod = "POST"
-        } else {
-            httpMethod = "DELETE"
-        }
+        var httpMethod: String = isLike ? "POST" : "DELETE"
+        
+//        if isLike {
+//            httpMethod = "POST"
+//        } else {
+//            httpMethod = "DELETE"
+//        }
         
         var request = URLRequest.makeHTTPRequest(path: "/photos/\(photoId)/like", httpMethod: httpMethod)
         
@@ -68,17 +69,19 @@ class ImagesListService {
         
         let task = objectForLike(for: request) { [weak self] result in
             guard let self = self else { return }
-            switch result {
-            case .success(let data):
-                let photoResult = Photo(photoResult: data.photo)
-                if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
-                    DispatchQueue.main.async {
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    let photoResult = Photo(photoResult: data.photo)
+                    if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
+                        
                         self.photos[index] = photoResult
                         completion(.success(true))
                     }
+                    
+                case .failure(let error):
+                    completion(.failure(error))
                 }
-            case .failure(let error):
-                completion(.failure(error))
             }
         }
         self.task = task

@@ -7,6 +7,8 @@
 
 import Foundation
 
+//let dateFormatting = ISO8601DateFormatter()
+
 struct PhotoResult: Decodable {
     let id: String
     let width: Int
@@ -39,7 +41,7 @@ struct Photo {
     init(photoResult: PhotoResult) {
         self.id = photoResult.id
         self.size = CGSize(width: photoResult.width, height: photoResult.height)
-        self.createdAt = ISO8601DateFormatter().date(from: photoResult.createdAt)
+        self.createdAt = photoResult.createdAt.dateFromISO8601()
         self.welcomeDescription = photoResult.welcomeDescription
         self.thumbImageUrl = photoResult.image.regular
         self.largeImageUrl = photoResult.image.raw
