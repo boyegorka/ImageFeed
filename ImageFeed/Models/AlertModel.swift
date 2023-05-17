@@ -5,12 +5,10 @@
 //  Created by Егор Свистушкин on 09.04.2023.
 //
 
-import Foundation
+import UIKit
 
 struct AlertModel {
     var title: String
     var message: String
-    var buttonText: String
-    
-    var completion: (() -> Void)
+    var actions: [UIAlertAction]
 }

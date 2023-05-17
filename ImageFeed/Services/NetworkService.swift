@@ -17,6 +17,7 @@ enum NetworkError: Error {
 // MARK: - HTTP Request
 
 extension URLRequest {
+    
     static func makeHTTPRequest(path: String, httpMethod: String, baseURL: URL = defaultBaseURL) -> URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
@@ -31,8 +32,8 @@ extension URLRequest {
 // MARK: - Network Connection
 
 extension URLSession {
+    
     func data(for request: URLRequest, completion: @escaping (Result<Data, Error>) -> Void) -> URLSessionTask {
-        
         let fulfillCompletion: (Result<Data, Error>) -> Void = { result in
             DispatchQueue.main.async {
                 completion(result)
