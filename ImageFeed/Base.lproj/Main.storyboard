@@ -68,7 +68,7 @@
         <!--Web View View Controller-->
         <scene sceneID="mXZ-UL-rbf">
             <objects>
-                <viewController id="MiH-e3-nsm" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="WebViewViewController" id="MiH-e3-nsm" customClass="WebViewViewController" customModule="ImageFeed" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="JqX-M9-igb">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -257,7 +257,7 @@
                                 </connections>
                             </scrollView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Kd-ci-2x9">
-                                <rect key="frame" x="159.66666666666666" y="771" width="74" height="64"/>
+                                <rect key="frame" x="159" y="771" width="75" height="64"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" image="Share"/>
                                 <buttonConfiguration key="configuration" style="plain" image="Share"/>
@@ -307,10 +307,10 @@
     </scenes>
     <resources>
         <image name="0" width="200" height="132"/>
-        <image name="Backward" width="9" height="15.666666984558105"/>
-        <image name="BackwardDark" width="9" height="15.666666984558105"/>
+        <image name="Backward" width="9" height="16"/>
+        <image name="BackwardDark" width="9" height="16"/>
         <image name="LikeNoActive" width="30" height="28"/>
-        <image name="Share" width="50.333332061767578" height="50"/>
+        <image name="Share" width="51" height="50"/>
         <image name="UnsplashLogo" width="60" height="60"/>
         <namedColor name="ypBlack">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

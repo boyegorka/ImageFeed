@@ -7,18 +7,18 @@
 
 import Foundation
 
-// MARK: - Network Error
+    // MARK: - Network Error
 enum NetworkError: Error {
     case httpStatusCode(Int)
     case urlRequestError(Error)
     case urlSessionError
 }
 
-// MARK: - HTTP Request
+    // MARK: - HTTP Request
 
 extension URLRequest {
     
-    static func makeHTTPRequest(path: String, httpMethod: String, baseURL: URL = defaultBaseURL) -> URLRequest {
+    static func makeHTTPRequest(path: String, httpMethod: String, baseURL: URL = AuthConfiguration.standart.defaultBaseURL) -> URLRequest {
         var request = URLRequest(url: URL(string: path, relativeTo: baseURL)!)
         request.httpMethod = httpMethod
         return request
@@ -29,7 +29,7 @@ extension URLRequest {
     }
 }
 
-// MARK: - Network Connection
+    // MARK: - Network Connection
 
 extension URLSession {
     
