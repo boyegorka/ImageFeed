@@ -36,6 +36,13 @@ final class TabBarController: UITabBarController {
     
     func getProfileViewController() -> ProfileViewController {
         let profileViewController = ProfileViewController()
+        
+        let presenter = ProfilePresenter()
+        
+        presenter.view = profileViewController
+        
+        profileViewController.presenter = presenter
+        
         profileViewController.tabBarItem = UITabBarItem(
             title: nil, image: UIImage(named: "ProfileActive"), selectedImage: nil
         )
