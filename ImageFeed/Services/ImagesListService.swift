@@ -51,7 +51,7 @@ class ImagesListService {
         self.task = task
     }
     
-    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Bool, Error>) -> Void) {
+    func changeLike(photoId: String, isLike: Bool, completion: @escaping (Result<Photo, Error>) -> Void) {
         
         let httpMethod: String = isLike ? "POST" : "DELETE"
         
@@ -70,7 +70,7 @@ class ImagesListService {
                     if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                         
                         self.photos[index] = photoResult
-                        completion(.success(true))
+                        completion(.success(photoResult))
                     }
                     
                 case .failure(let error):
