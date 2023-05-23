@@ -71,12 +71,12 @@ final class ProfileViewController: UIViewController, ProfileViewControllerDelega
     
     lazy var profileLogOutButton: UIButton = {
         let profileLogOutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(Self.buttonLogOutTouched))
-        //  #selector(Self.logOut)   <----  предыдущее действие кнопки
         view.addSubview(profileLogOutButton)
         profileLogOutButton.tintColor = .ypRed
         profileLogOutButton.translatesAutoresizingMaskIntoConstraints = false
         profileLogOutButton.topAnchor.constraint(equalTo: profileImage.centerYAnchor ).isActive = true
         profileLogOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
+        profileLogOutButton.accessibilityIdentifier = "ProfileLogOutButton"
         return profileLogOutButton
     }()
     
@@ -87,6 +87,7 @@ final class ProfileViewController: UIViewController, ProfileViewControllerDelega
         view.backgroundColor = .ypBlack
         
         presenter?.viewDidLoad()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {

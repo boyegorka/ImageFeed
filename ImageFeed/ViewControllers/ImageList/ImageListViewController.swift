@@ -21,7 +21,8 @@ class ImageListViewController: UIViewController, ImageListViewControllerProtocol
     @IBOutlet private var tableView: UITableView!
     
     // MARK: - Properties (var & let)
-    private let ShowSingleImageSegueIdentifier = "ShowSingleImage"
+    private let showSingleImageSegueIdentifier = "ShowSingleImage"
+    private let tableViewAccessibilityIdentifier = "ImageListTableView"
     weak var delegate: ImagesListCellDelegate?
     var presenter: ImageListPresenterProtocol?
     
@@ -32,12 +33,13 @@ class ImageListViewController: UIViewController, ImageListViewControllerProtocol
         tableView.delegate = self
         tableView.dataSource = self
         tableView.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        tableView.accessibilityIdentifier = tableViewAccessibilityIdentifier
     }
     
     // MARK: - Functions
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == ShowSingleImageSegueIdentifier {
+        if segue.identifier == showSingleImageSegueIdentifier {
             let viewController = segue.destination as! SingleImageViewController
             let indexPath = sender as! IndexPath
             let imageUrl = presenter?.photos[indexPath.row].largeImageUrl
@@ -84,7 +86,7 @@ extension ImageListViewController: UITableViewDataSource {
 extension ImageListViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: ShowSingleImageSegueIdentifier, sender: indexPath)
+        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -38,6 +38,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     weak var delegate: WebViewViewControllerDelegate?
     private var estimatedProgressObservation: NSKeyValueObservation?
     var presenter: WebViewPresenterProtocol?
+    private let UnsplashWebViewAccessibilityIdentifier = "UnsplashWebView"
     
     // MARK: - Lifecycle
     
@@ -48,6 +49,8 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
             guard let self = self else { return }
             presenter?.didUpdateProgressValue(webView.estimatedProgress)
         })
+        
+        webView.accessibilityIdentifier = UnsplashWebViewAccessibilityIdentifier
         
         webView.navigationDelegate = self
         presenter?.viewDidLoad()
