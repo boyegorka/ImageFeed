@@ -23,11 +23,6 @@ public protocol WebViewViewControllerProtocol: AnyObject {
 
 final class WebViewViewController: UIViewController, WebViewViewControllerProtocol {
     
-    func load(request: URLRequest) {
-        webView.load(request)
-    }
-    
-    
     // MARK: - Outlets
     
     @IBOutlet private var webView: WKWebView!
@@ -63,6 +58,10 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     }
     
     // MARK: - Functions
+    
+    func load(request: URLRequest) {
+        webView.load(request)
+    }
     
     func setProgressValue(_ newValue: Float) {
         progressView.progress = newValue

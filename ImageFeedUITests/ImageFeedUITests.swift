@@ -23,10 +23,10 @@ final class ImageFeedUITests: XCTestCase {
         let webView = app.webViews["UnsplashWebView"]
         let loginTextField = webView.descendants(matching: .textField).element
         let passwordTextField = webView.descendants(matching: .secureTextField).element
-        let tablesQuery = app.tables
         sleep(10)
         loginTextField.tap()
         loginTextField.typeText("boyegorka@gmail.com")
+        sleep(2)
         passwordTextField.tap()
         passwordTextField.typeText("Qwerty123")
         webView.buttons["Login"].tap()
@@ -35,6 +35,10 @@ final class ImageFeedUITests: XCTestCase {
         //        sleep(3)
         //        webView.buttons["Continue as *ИМЯ*"].tap()
         
+        let tablesQuery = app.tables
+        let cell = tablesQuery.children(matching: .cell).element(boundBy: 0)
+        XCTAssertTrue(cell.waitForExistence(timeout: 5))
+        app.swipeUp()
         sleep(3)
     }
     
