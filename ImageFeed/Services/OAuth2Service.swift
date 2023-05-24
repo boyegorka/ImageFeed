@@ -11,11 +11,18 @@ import Foundation
 
 final class OAuth2Service {
     
+    // MARK: - Properties (var & let)
+
     static let shared = OAuth2Service()
     private let urlSession = URLSession.shared
     private var task: URLSessionTask?
     private var lastCode: String?
     private var storage = OAuth2TokenStorage()
+    private let configuration: AuthConfiguration
+    
+    init(configuration: AuthConfiguration = .standart) {
+        self.configuration = configuration
+    }
     
     private (set) var authToken: String? {
         get {
@@ -25,6 +32,8 @@ final class OAuth2Service {
             storage.token = newValue
         }
     }
+    
+    // MARK: - Functions
     
     func fetchOAuthToken(_ code: String, completion: @escaping (Result<String, Error>) -> Void) {
         
@@ -58,7 +67,7 @@ final class OAuth2Service {
     }
 }
 
-// MARK: - Extensions
+    // MARK: - Extensions
 
 extension OAuth2Service {
     
@@ -75,9 +84,9 @@ extension OAuth2Service {
     private func authTokenRequest(code: String) -> URLRequest {
         URLRequest.makeHTTPRequest(
             path: "/oauth/token"
-            + "?client_id=\(accessKey)"
-            + "&&client_secret=\(secretKey)"
-            + "&&redirect_uri=\(redirectURI)"
+            + "?client_id=\(configuration.accessKey)"
+            + "&&client_secret=\(configuration.secretKey)"
+            + "&&redirect_uri=\(configuration.redirectURI)"
             + "&&code=\(code)"
             + "&&grant_type=authorization_code",
             httpMethod: "POST",

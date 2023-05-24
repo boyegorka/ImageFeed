@@ -8,13 +8,23 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+public protocol ProfileViewControllerDelegate: AnyObject {
+    var presenter: ProfilePresenterProtocol? { get }
+    var profileImage: UIImageView { get }
+    var profileName: UILabel { get }
+    var profileNickname: UILabel { get }
+    var profileStatus: UILabel { get }
+    var profileLogOutButton: UIButton { get }
+    func stopAnimation()
+}
+
+final class ProfileViewController: UIViewController, ProfileViewControllerDelegate {
     
     // MARK: - Properties (var & let)
     
-    private let service = ProfileService.shared
+    var presenter: ProfilePresenterProtocol?
     
-    private lazy var profileImage: UIImageView = {
+    lazy var profileImage: UIImageView = {
         let profileImage = UIImageView()
         view.addSubview(profileImage)
         profileImage.tintColor = .gray
@@ -28,7 +38,7 @@ final class ProfileViewController: UIViewController {
         return profileImage
     }()
     
-    private lazy var profileName: UILabel = {
+    lazy var profileName: UILabel = {
         let profileName = UILabel()
         view.addSubview(profileName)
         profileName.textColor = .ypWhite
@@ -39,7 +49,7 @@ final class ProfileViewController: UIViewController {
         return profileName
     }()
     
-    private lazy var profileNickname: UILabel = {
+    lazy var profileNickname: UILabel = {
         let profileNickname = UILabel()
         view.addSubview(profileNickname)
         profileNickname.textColor = .ypGray
@@ -49,7 +59,7 @@ final class ProfileViewController: UIViewController {
         return profileNickname
     }()
     
-    private lazy var profileStatus: UILabel = {
+    lazy var profileStatus: UILabel = {
         let profileStatus = UILabel()
         view.addSubview(profileStatus)
         profileStatus.textColor = .ypWhite
@@ -59,13 +69,14 @@ final class ProfileViewController: UIViewController {
         return profileStatus
     }()
     
-    private lazy var profileLogOutButton: UIButton = {
-        let profileLogOutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(Self.logOut))
+    lazy var profileLogOutButton: UIButton = {
+        let profileLogOutButton = UIButton.systemButton(with: UIImage(systemName: "ipad.and.arrow.forward")!, target: self, action: #selector(Self.buttonLogOutTouched))
         view.addSubview(profileLogOutButton)
         profileLogOutButton.tintColor = .ypRed
         profileLogOutButton.translatesAutoresizingMaskIntoConstraints = false
         profileLogOutButton.topAnchor.constraint(equalTo: profileImage.centerYAnchor ).isActive = true
         profileLogOutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20).isActive = true
+        profileLogOutButton.accessibilityIdentifier = "ProfileLogOutButton"
         return profileLogOutButton
     }()
     
@@ -75,14 +86,8 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .ypBlack
         
-        NotificationCenter.default
-            .addObserver(forName: ProfileImageService.didChangeProfileImageNotification, object: nil, queue: .main) { [weak self] _ in
-                guard let self = self else { return }
-                stopAnimation()
-                self.updateAvatar()
-            }
-        //setupData()
-        setDefaultData()
+        presenter?.viewDidLoad()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -90,43 +95,15 @@ final class ProfileViewController: UIViewController {
         // В одном из спринтов мы вынесли загрузку профиля на Splash Screen, получается что профиль уже загружен, когда я перехожу на экран профиля, а код ниже для демонстрации работы анимации, в целом анимация тут лишняя. SetupData мы можем вызвать во ViewDidLoad
         startAnimation()
         DispatchQueue.main.asyncAfter(deadline: .now() + 3.0, execute: {
-            self.setupData()
+            self.presenter?.setupData()
         })
     }
     
     // MARK: - Functions
     
     @objc
-    private func logOut() {
-        service.logOut()
-    }
-    
-    func setupData() {
-        stopAnimation()
-        updateAvatar()
-        profileName.text = service.savedProfile?.name
-        profileNickname.text = service.savedProfile?.loginName
-        profileStatus.text = service.savedProfile?.bio
-        profileLogOutButton.isHidden = false
-    }
-    
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.profileImageURL,
-            let urlImage = URL(string: profileImageURL)
-        else { return }
-        
-        let processor = RoundCornerImageProcessor(cornerRadius: 60)
-        profileImage.kf.setImage(with: urlImage,
-                                 placeholder: UIImage(systemName: "person.crop.circle.fill"),
-                                 options: [.processor(processor),
-                                           .cacheSerializer(FormatIndicatedCacheSerializer.png)])
-    }
-    
-    func setDefaultData() {
-        profileName.text = "Фамилия Имя Отчество"
-        profileNickname.text = "Ваш nickname"
-        profileStatus.text = "Ваш статус"
+    func buttonLogOutTouched() {
+        presenter?.logOut()
     }
     
     private func startAnimation() {
@@ -136,7 +113,7 @@ final class ProfileViewController: UIViewController {
         profileStatus.addLayerLoading(radius: profileStatus.frame.height/2)
     }
     
-    private func stopAnimation() {
+    func stopAnimation() {
         profileImage.removeLayerLoading()
         profileName.removeLayerLoading()
         profileNickname.removeLayerLoading()
