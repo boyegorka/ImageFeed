@@ -1,5 +1,7 @@
 # Image Feed
 
+https://github.com/boyegorka/ImageFeed/assets/78556508/319b8139-2c9a-40e7-a18f-c44f25dca62b
+
 ## Ссылки
 - [Дизайн в Figma](https://tinyurl.com/image-feed-figma)
 - [Unsplash API](https://unsplash.com/documentation)
